@@ -1,9 +1,4 @@
 /*
- * I2C-Generator: 0.2.0
- * Yaml Version: 0.1.0
- * Template Version: 0.7.0
- */
-/*
  * Copyright (c) 2021, Sensirion AG
  * All rights reserved.
  *
@@ -46,17 +41,28 @@
  * #define printf(...)
  */
 
-// TODO: DRIVER_GENERATOR Add missing commands and make prints more pretty
-
 int main(void) {
     int16_t error = 0;
 
     sensirion_i2c_hal_init();
 
+    error = sfa3x_device_reset();
+    if (error) {
+        printf("Error resetting device: %i\n", error);
+        return -1;
+    }
+
+    uint8_t device_marking[32];
+    error =
+        sfa3x_get_device_marking(&device_marking[0], sizeof(device_marking));
+    if (error) {
+        printf("Error getting device marking: %i\n", error);
+        return -1;
+    }
+    printf("Device marking: %s\n", device_marking);
+
     // Start Measurement
-
     error = sfa3x_start_continuous_measurement();
-
     if (error) {
         printf("Error executing sfa3x_start_continuous_measurement(): %i\n",
                error);
@@ -64,28 +70,25 @@ int main(void) {
 
     for (;;) {
         // Read Measurement
-        // TODO: DRIVER_GENERATOR check and update measurement interval
-        sensirion_i2c_hal_sleep_usec(1000000);
-        // TODO: DRIVER_GENERATOR Add scaling and offset to printed measurement
-        // values
 
         int16_t hcho;
         int16_t humidity;
         int16_t temperature;
+
+        sensirion_i2c_hal_sleep_usec(500000);
 
         error = sfa3x_read_measured_values(&hcho, &humidity, &temperature);
 
         if (error) {
             printf("Error executing sfa3x_read_measured_values(): %i\n", error);
         } else {
-            printf("Hcho: %i\n", hcho);
-            printf("Humidity: %i\n", humidity);
-            printf("Temperature: %i\n", temperature);
+            printf("Formaldehyde concentration: %.1f ppb\n", hcho / 5.0f);
+            printf("Relative humidity: %.2f %%RH\n", humidity / 100.0f);
+            printf("Temperature: %.2f °C\n", temperature / 200.0f);
         }
     }
 
     error = sfa3x_stop_measurement();
-
     if (error) {
         printf("Error executing sfa3x_stop_measurement(): %i\n", error);
     }
