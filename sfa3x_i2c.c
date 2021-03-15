@@ -71,8 +71,8 @@ int16_t sfa3x_stop_measurement(void) {
     return NO_ERROR;
 }
 
-int16_t sfa3x_read_measured_values(int16_t* hcho, int16_t* humidity,
-                                   int16_t* temperature) {
+int16_t sfa3x_read_measured_values_ticks(int16_t* hcho, int16_t* humidity,
+                                         int16_t* temperature) {
     int16_t error;
     uint8_t buffer[9];
     uint16_t offset = 0;
@@ -92,6 +92,26 @@ int16_t sfa3x_read_measured_values(int16_t* hcho, int16_t* humidity,
     *hcho = sensirion_common_bytes_to_int16_t(&buffer[0]);
     *humidity = sensirion_common_bytes_to_int16_t(&buffer[2]);
     *temperature = sensirion_common_bytes_to_int16_t(&buffer[4]);
+    return NO_ERROR;
+}
+
+int16_t sfa3x_read_measured_values(float* hcho, float* humidity,
+                                   float* temperature) {
+    int16_t error;
+    int16_t hcho_ticks;
+    int16_t humidity_ticks;
+    int16_t temperature_ticks;
+
+    error = sfa3x_read_measured_values_ticks(&hcho_ticks, &humidity_ticks,
+                                             &temperature_ticks);
+    if (error) {
+        return error;
+    }
+
+    *hcho = (float)hcho_ticks / 5.0f;
+    *humidity = (float)humidity_ticks / 100.0f;
+    *temperature = (float)temperature_ticks / 200.0f;
+
     return NO_ERROR;
 }
 

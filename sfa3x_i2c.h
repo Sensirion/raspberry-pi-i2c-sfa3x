@@ -66,7 +66,7 @@ int16_t sfa3x_start_continuous_measurement(void);
 int16_t sfa3x_stop_measurement(void);
 
 /**
- * sfa3x_read_measured_values() - Returns the new measurement results as
+ * sfa3x_read_measured_values_ticks() - Returns the new measurement results as
  * integers.
  *
  * @param hcho Formaldehyde concentration in ppb with a scaling of 5.
@@ -77,14 +77,29 @@ int16_t sfa3x_stop_measurement(void);
  *
  * @return 0 on success, an error code otherwise
  */
-int16_t sfa3x_read_measured_values(int16_t* hcho, int16_t* humidity,
-                                   int16_t* temperature);
+int16_t sfa3x_read_measured_values_ticks(int16_t* hcho, int16_t* humidity,
+                                         int16_t* temperature);
+
+/**
+ * sfa3x_read_measured_values() - Returns the new measurement results as
+ * float.
+ *
+ * @param hcho Formaldehyde concentration in ppb.
+ *
+ * @param humidity Relative humidity in % RH.
+ *
+ * @param temperature Temperature in degrees Celsius.
+ *
+ * @return 0 on success, an error code otherwise
+ */
+int16_t sfa3x_read_measured_values(float* hcho, float* humidity,
+                                   float* temperature);
 
 /**
  * sfa3x_get_device_marking() - Read the device marking string from the device.
  *
  * @param device_marking ASCII string containing the serial number. The string
- * has the null-termination character included.
+ * has the null-termination character included and is at most 32 bytes long.
  *
  * @return 0 on success, an error code otherwise
  */
