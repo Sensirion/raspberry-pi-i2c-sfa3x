@@ -70,8 +70,8 @@ int main(void) {
     float humidity = 0.0;
     float temperature = 0.0;
     uint16_t repetition = 0;
-    for (repetition = 0; repetition < 50; repetition++) {
-        sensirion_hal_sleep_us(1000000);
+    for (repetition = 0; repetition < 100; repetition++) {
+        sensirion_hal_sleep_us(500000);
         error = sfa3x_read_measured_values(&hcho, &humidity, &temperature);
         if (error != NO_ERROR) {
             printf("error executing read_measured_values(): %i\n", error);
