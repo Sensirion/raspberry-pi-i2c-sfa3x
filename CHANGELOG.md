@@ -5,17 +5,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] 
 
-## [1.0.0] - 2025-3-17
+## [1.0.0] - 2025-3-18
 
 ### Added
 
-- All commands according to data sheet
-## [0.1.0] - 2021-2-1
+- All commands generated according to data sheet. This introduces breaking changes!
 
-### Added
+### Breaking changes
 
-- Initial version
-- Check latest 0.x.x version for changelog prior to version 1.0.0
+- `sfa3x_read_measured_values_ticks()` is now `sfa3x_read_measured_values_as_integers()`
+
+## [0.1.0] - 2021-3-15
+
+- Initial Release
 
 [Unreleased]: https://github.com/Sensirion/raspberry-pi-i2c-sfa3x/compare/1.0.0...HEAD
 [1.0.0]: https://github.com/Sensirion/raspberry-pi-i2c-sfa3x/compare/0.1.0...1.0.0
